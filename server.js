@@ -1,62 +1,27 @@
 const express = require("express");
-let fs = require("fs");
 const app = express();
-
 const port = 3000;
+const db = require('./db');
 
-// readFileAsncronasly: non-bloking;
+ // Middleware to parse JSON bodies
+ const bodyParser = require('body-parser');
+ app.use(bodyParser.json());
 
-fs.readFile('./greeting.txt','utf8',(err, data) =>{
-    if(err){
-        console.log("Its a errr", err);
-        return0;
-    }
-    console.log(data);
-})
-
-//readFileSncronasly: bloking;
-
-try{
-    const data = fs.appendFileSync('./greeting.txt', 'utf8');
-    console.log(data);
-}catch (err){
-    console.err(err);
-}
-
-// createfileAscronaly; non-bloking;
-
-const content = "Vishal Ashok Babar";
-
-fs.writeFile('name.txt',  content, (err, data) =>{
-         if(err){
-            console.log(err);
-         }
-         console.log(data);
-})
-
-// createfileScronasly: Bloking;
-
-try{
-    const data = fs.writeFileSync('name.txt', 'utf8');
-    console.log(data); 
-}catch(err){
-    console.error(err);
-}
-
+ //personedata...
+  const personeRouts = require('./router/personRoutes');
+  app.use('/person', personeRouts);
+ 
+// menudata
+const menuroutes = require('./router/menuRoutes');
+app.use('/menu',menuroutes);
+  
+ 
+//home page...
 app.get('/', (req, res) =>{
-      res.send("Hy ITs me Home page");
+      res.send('hy its working');
 })
-
-app.get('/About', (req, res) =>{
-    res.send("hy Its About page");
-})
-
-app.get('/Contact', (req, res) =>{
-    res.send("hy Its contact page");
-})
-
 
 
 app.listen(port, () =>{
-    console.log("Its Working");
+    console.log("Server Is Working");
 })
